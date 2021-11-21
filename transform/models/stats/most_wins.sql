@@ -1,39 +1,15 @@
-with results as (
+with finishes_by_driver as (
   select *
-    from {{ ref('results') }}
-),
-races as (
-  select *
-    from {{ ref('races') }}
-),
-drivers as (
-  select *
-    from {{ ref('drivers') }}
-),
-joined as (
-  select *
-    from results
-    join races
-   using (race_id)
-    join drivers
-   using (driver_id)
-),
-wins as (
-  select driver_ref,
-         driver_full_name,
-         count(*) as wins
-    from joined
-   where position_order = 1
-   group by 1, 2
-   order by wins desc
+    from {{ ref('finishes_by_driver') }}
 ),
 final as (
-  select rank() over (order by wins desc) as rank,
+  select rank() over (order by p1 desc) as rank,
          driver_full_name,
-         wins
-    from wins
+         p1 as wins
+    from finishes_by_driver
+   order by p1 desc
+   limit 20
 )
 
 select *
   from final
- limit 20
