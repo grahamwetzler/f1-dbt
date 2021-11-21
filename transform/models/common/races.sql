@@ -15,7 +15,8 @@ circuits as (
     from {{ ref('circuits') }}
 ),
 final as (
-  select *
+  select *,
+         race_date >= '1983-01-01' as is_modern_era
     from races r
     join circuits c
    using (circuit_id)
