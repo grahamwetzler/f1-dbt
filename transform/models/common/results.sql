@@ -19,7 +19,13 @@ with results as (
           rank
 
     from {{ source('ergast', 'results') }}
+),
+position_descriptions as (
+  select *
+    from {{ ref('position_descriptions') }}
 )
 
 select *
   from results
+  left join position_descriptions
+ using (position_text)
