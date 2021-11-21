@@ -18,6 +18,7 @@ podiums as (
 grouped as (
   select constructor_id,
          constructor_name,
+         count(*) as races,
          count(*) filter (where position_order between 1 and 3) as podiums,
          {% for p in range(1, 21) %}
          sum(case
