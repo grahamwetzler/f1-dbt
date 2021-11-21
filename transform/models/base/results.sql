@@ -20,6 +20,11 @@ with results as (
 
     from {{ source('ergast', 'results') }}
 ),
+status_descriptions as (
+  select "statusId" as status_id,
+         "status" as status_desc
+    from {{ source('ergast', 'status') }}
+),
 position_descriptions as (
   select *
     from {{ ref('position_descriptions') }}
@@ -29,3 +34,5 @@ select *
   from results
   left join position_descriptions
  using (position_text)
+  left join status_descriptions
+ using (status_id)
