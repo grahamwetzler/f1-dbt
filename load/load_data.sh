@@ -2,6 +2,8 @@
 
 set -e
 
+cd "$(dirname "$0")"
+
 psql -d f1 -f create_tables.sql
 
 working_dir=/tmp/f1
@@ -12,7 +14,7 @@ unzip -o f1db_csv.zip
 
 
 for file in *.csv; do
-    sed -i .bak 's/\\N//' $file
+    sed -i .bak 's/\\N//g' $file
     psql -v ON_ERROR_STOP=1 --dbname f1 <<EOF
 \copy ergast.${file%.*} FROM $file WITH (FORMAT CSV, HEADER true);
 EOF
