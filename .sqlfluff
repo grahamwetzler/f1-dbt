@@ -1,0 +1,10 @@
+[sqlfluff]
+templater = jinja
+verbose = 1
+exclude_rules = L003,L031,L032,L036
+dialect = postgres
+
+[sqlfluff:templater:dbt]
+project_dir = transform/
+profiles_dir = ~/.dbt/
+profile = f1
