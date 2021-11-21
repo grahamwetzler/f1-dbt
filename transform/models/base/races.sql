@@ -10,15 +10,32 @@ with races as (
 
     from {{ source('ergast', 'races') }}
 ),
+
 circuits as (
   select *
     from {{ ref('circuits') }}
 ),
+
 final as (
-  select *,
-         race_date >= '1983-01-01' as is_modern_era
-    from races r
-    join circuits c
+  select r.race_date,
+         r.round_number,
+         r.race_id,
+         r.race_year,
+         r.race_time,
+         r.race_url,
+         r.race_name,
+         circuit_id,
+         c.circuit_name,
+         c.latitude,
+         c.longitude,
+         c.alitude,
+         c.country,
+         c.circuit_url,
+         c.circuit_ref,
+         c.circuit_location,
+         r.race_date >= '1983-01-01' as is_modern_era
+    from races as r
+    join circuits as c
    using (circuit_id)
 )
 

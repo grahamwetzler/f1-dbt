@@ -20,19 +20,44 @@ with results as (
 
     from {{ source('ergast', 'results') }}
 ),
+
 status_descriptions as (
   select "statusId" as status_id,
          "status" as status_desc
     from {{ source('ergast', 'status') }}
 ),
+
 position_descriptions as (
   select *
     from {{ ref('position_descriptions') }}
+),
+
+final as (
+  select r.status_id,
+         r.race_id,
+         r.driver_id,
+         r.constructor_id,
+         r.result_id,
+         r.grid,
+         r.position_order,
+         r.points,
+         r.laps,
+         r.fastest_lap_time,
+         r.fastest_lap_speed,
+         r.lap_time,
+         r.lap_milliseconds,
+         r.lap_number,
+         r.fastest_lap,
+         r.position,
+         r.rank,
+         s.status_desc,
+         p.position_desc
+    from results as r
+    left join position_descriptions as p
+  using (position_text)
+    left join status_descriptions as s
+  using (status_id)
 )
 
 select *
-  from results
-  left join position_descriptions
- using (position_text)
-  left join status_descriptions
- using (status_id)
+  from final
